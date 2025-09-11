@@ -1,4 +1,6 @@
-export default class Player
+const Gameboard = require("./gameboard.js");
+
+class Player
 {
     constructor(name)
     {
@@ -6,3 +8,5 @@ export default class Player
         this.name = name;
     }
 }
+
+module.exports = Player;

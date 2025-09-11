@@ -1,7 +1,6 @@
-const { default: expect } = require("expect");
-const Ship = require("./ship.js")
+const Ship = require("./ship.js");
 
-let ship = null;
+let ship;
 
 beforeEach(() => {
     ship = new Ship(12);

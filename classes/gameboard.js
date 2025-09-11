@@ -1,14 +1,15 @@
-import Ship from "./ship.js";
+const Ship = require("./ship.js");
 
-export default class Gameboard
+class Gameboard
 {
-    #grid
-    #missed
+    #size;
+    #fleet = [];
 
-    constructor()
+    constructor(size = 10)
     {
-        this.#grid = Array.from({ length: 10 }, () => Array(10).fill(null));
-        this.#missed = Array.from({ length: 10 }, () => Array(10).fill(false));
+        this.fleetGrid = Array.from({ length: size }, () => Array(size).fill(null));
+        this.missedShotsGrid = Array.from({ length: size }, () => Array(size).fill(false));
+        this.#size = size;
     }
 
     placeShipX(ship, x, y)
@@ -16,15 +17,17 @@ export default class Gameboard
         let placeShip = true;
 
         for( let i = 0; i < ship.length; i++ ) {
-            if( x + i >= this.#grid.length || this.#grid[x + i][y] ) {
+            if( x + i >= this.#size || this.fleetGrid[x + i][y] ) {
                 placeShip = false;
                 break;
             }
         }
 
         if( placeShip ) {
-            for( let i = 0; i < ship.length; i++ )
-                this.#grid[x + i][y] = ship;
+            for( let i = 0; i < ship.length; i++ ) {
+                this.fleetGrid[x + i][y] = ship;
+                this.#fleet.push(ship);
+            }
         }
     }
 
@@ -33,44 +36,48 @@ export default class Gameboard
         let placeShip = true;
 
         for( let i = 0; i < ship.length; i++ ) {
-            if( y + i >= this.#grid[0].length || this.#grid[x][y + i] ) {
+            if( y + i >= this.#size || this.fleetGrid[x][y + i] ) {
                 placeShip = false;
                 break;
             }
         }
 
         if( placeShip ) {
-            for( let i = 0; i < ship.length; i++ )
-                this.#grid[x][y + i] = ship;
+            for( let i = 0; i < ship.length; i++ ) {
+                this.fleetGrid[x][y + i] = ship;
+                this.#fleet.push(ship);
+            }
         }
     }
 
     receiveAttack(x, y)
     {
-        let ship = this.#grid[x][y];
+        let ship = this.fleetGrid[x][y];
 
         if( ship ) {
             ship.hit();
 
-            if( ship.isSunk() ) {
-                this.allSunk = true;
-
-                for( let i = 0; i < this.#grid.length; i++ ) {
-                    for( let j = 0; j < this.#grid[0].length; j++ ) {
-                        let ship = this.#grid[i][j];
-
-                        if( !ship || ship.isSunk() )
-                            continue;
-
-                        this.allSunk = false;
-                        break;
-                    }
-
-                    if( !this.allSunk )
-                        break;
-                }
-            }
+            if( ship.isSunk() )
+                this.#fleet.splice(this.#fleet.indexOf(ship), 1);
         } else
-            this.#missed[x][y] = true;
+            this.missedShotsGrid[x][y] = true;
+    }
+
+    getShip(x, y)
+    {
+        if( x < 0 || x >= this.#size )
+            return null;
+
+        if( y < 0 || y >= this.#size )
+            return null;
+
+        return this.fleetGrid[x][y];
+    }
+
+    allSunk() 
+    {
+        return this.#fleet.length === 0;
     }
 }
+
+module.exports = Gameboard;
