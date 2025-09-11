@@ -1,4 +1,4 @@
-export default class Ship
+class Ship
 {
     constructor(length)
     {
@@ -16,3 +16,5 @@ export default class Ship
         return this.hits >= this.length;
     }
 }
+
+module.exports = Ship;
