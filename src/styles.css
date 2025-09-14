@@ -2,6 +2,47 @@ body {
     background-color: pink;
     display: flex;
     flex-direction: column;
+    gap: 150px
+}
+
+header {
+    font-size: 100px;
+    text-align: center;
+}
+
+main {
+    text-align: center;
+}
+
+#button-start {
+    font-size: 100px;
+    padding: 25px;
+}
+
+.game {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+}
+
+.player-name {
+    font-size: 25px;
+    padding: 10px 0px;
+    text-align: center;
+}
+
+.board {
+    border: 2px black solid;
+    height: 500px;
+    width: 500px;
+    display: grid;
+    grid-template: repeat(10, 1fr) / repeat(10, 1fr);
+    gap: 2px;
+}
+
+.cell {
+    background-color: red;
+    border: 5px black solid;
 }
 
 footer {

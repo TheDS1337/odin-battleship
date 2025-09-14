@@ -7,6 +7,11 @@ class Player
         this.gameboard = new Gameboard();
         this.name = name;
     }
+
+    getName() 
+    {
+        return this.name;
+    }
 }
 
 module.exports = Player;
