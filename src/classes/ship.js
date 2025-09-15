@@ -1,8 +1,17 @@
 class Ship
 {
-    constructor(length)
+    static lengthByType = {
+        destroyer: 2,
+        submarine: 3,
+        cruiser: 3,
+        battleship: 4,
+        carrier: 5
+    };
+
+    constructor(type)
     {
-        this.length = length;
+        this.type = type;
+        this.length = Ship.lengthByType[type];
         this.hits = 0;
     }
 

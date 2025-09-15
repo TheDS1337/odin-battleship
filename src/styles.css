@@ -40,9 +40,24 @@ main {
     gap: 2px;
 }
 
-.cell {
+.destroyer {
     background-color: red;
-    border: 5px black solid;
+}
+
+.submarine {
+    background-color: blue;
+}
+
+.cruiser {
+    background-color: aqua;
+}
+
+.battleship {
+    background-color: green;
+}
+
+.carrier {
+    background-color: black;
 }
 
 footer {

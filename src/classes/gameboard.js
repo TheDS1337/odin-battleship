@@ -2,52 +2,42 @@ const Ship = require("./ship.js");
 
 class Gameboard
 {
-    #size;
     #fleet = [];
 
-    constructor(size = 10)
+    constructor()
     {
-        this.fleetGrid = Array.from({ length: size }, () => Array(size).fill(null));
-        this.missedShotsGrid = Array.from({ length: size }, () => Array(size).fill(false));
-        this.#size = size;
+        this.fleetGrid = Array.from({ length: 10 }, () => Array(10).fill(null));
+        this.missedShotsGrid = Array.from({ length: 10 }, () => Array(10).fill(false));
     }
 
     placeShipX(ship, x, y)
     {
-        let placeShip = true;
+        for( let i = 0; i < ship.length; i++ ) {
+            if( x + i >= 10 || this.fleetGrid[x + i][y] )
+                return false;
+        }
 
         for( let i = 0; i < ship.length; i++ ) {
-            if( x + i >= this.#size || this.fleetGrid[x + i][y] ) {
-                placeShip = false;
-                break;
-            }
+            this.fleetGrid[x + i][y] = ship;
+            this.#fleet.push(ship);
         }
 
-        if( placeShip ) {
-            for( let i = 0; i < ship.length; i++ ) {
-                this.fleetGrid[x + i][y] = ship;
-                this.#fleet.push(ship);
-            }
-        }
+        return true;
     }
 
     placeShipY(ship, x, y)
     {
-        let placeShip = true;
+        for( let i = 0; i < ship.length; i++ ) {
+            if( y + i >= 10 || this.fleetGrid[x][y + i] )
+                return false;
+        }
 
         for( let i = 0; i < ship.length; i++ ) {
-            if( y + i >= this.#size || this.fleetGrid[x][y + i] ) {
-                placeShip = false;
-                break;
-            }
+            this.fleetGrid[x][y + i] = ship;
+            this.#fleet.push(ship);
         }
 
-        if( placeShip ) {
-            for( let i = 0; i < ship.length; i++ ) {
-                this.fleetGrid[x][y + i] = ship;
-                this.#fleet.push(ship);
-            }
-        }
+        return true;
     }
 
     receiveAttack(x, y)
@@ -65,10 +55,10 @@ class Gameboard
 
     getShip(x, y)
     {
-        if( x < 0 || x >= this.#size )
+        if( x < 0 || x >= 10 )
             return null;
 
-        if( y < 0 || y >= this.#size )
+        if( y < 0 || y >= 10 )
             return null;
 
         return this.fleetGrid[x][y];
@@ -77,6 +67,25 @@ class Gameboard
     allSunk() 
     {
         return this.#fleet.length === 0;
+    }
+
+    randomlyPopulate()
+    {
+        for( let i of ["destroyer",
+                        "submarine",
+                        "cruiser",
+                        "battleship",
+                        "carrier"] ) {
+            const ship = new Ship(i);
+            let success = false;
+
+            do {
+                const x = Math.floor(Math.random() * 8);
+                const y = Math.floor(Math.random() * 8);
+
+                success = Math.random() < 0.5 ? this.placeShipX(ship, x, y) : this.placeShipY(ship, x, y);
+            } while( !success );
+        }
     }
 }
 

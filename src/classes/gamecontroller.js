@@ -31,7 +31,10 @@ module.exports = new (class GameController
 
     createBoard(name)
     {
-        this.players.push(new Player(name));
+        const player = new Player(name);
+        player.gameboard.randomlyPopulate();
+
+        const playerId = this.players.push(player) - 1;
 
         const container = document.createElement("div");
 
@@ -48,14 +51,23 @@ module.exports = new (class GameController
             let row = [];
 
             for( let j = 0; j < 10; j++ ) {
-                const cell = document.createElement("div");
-                cell.classList.add("cell");                
+                const cell = document.createElement("button");
+
+                cell.id = `${playerId}-${i}-${j}`;
+                cell.classList.add("cell");
+
+                const ship = player.gameboard.getShip(i, j);
+                
+                if( ship )
+                    cell.classList.add(ship.type);
+                
+                cell.addEventListener("click", this.#onCellClick);
+
                 row.push(board.appendChild(cell));
             }
 
             cells.push(row);
         }
-
 
         this.boards.push({ board: board, cells: cells });
 
@@ -63,5 +75,11 @@ module.exports = new (class GameController
         container.appendChild(board);
 
         return container;
+    }
+
+    #onCellClick(event) 
+    {
+        let cell = event.target;
+        console.log(`clicked: ${cell.id}`);
     }
 })();
