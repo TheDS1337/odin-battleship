@@ -60,6 +60,14 @@ main {
     background-color: black;
 }
 
+.ship-hit {
+    background-color: orangered;
+}
+
+.ship-miss {
+    background-color: yellow;
+}
+
 footer {
     text-align: center;
 }

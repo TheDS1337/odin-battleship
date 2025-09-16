@@ -46,11 +46,15 @@ class Gameboard
 
         if( ship ) {
             ship.hit();
-
+            
             if( ship.isSunk() )
-                this.#fleet.splice(this.#fleet.indexOf(ship), 1);
-        } else
-            this.missedShotsGrid[x][y] = true;
+                this.#fleet.splice(this.#fleet.indexOf(ship), ship.length);
+            
+            return true
+        }
+
+        this.missedShotsGrid[x][y] = true;
+        return false;
     }
 
     getShip(x, y)
